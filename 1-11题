@@ -1,0 +1,120 @@
+
+1-11题 
+create table employ(
+       employid int(11),
+       ename varchar(50),
+       sex varchar(50),
+       age int(11),
+       deptid int(11),
+       stationid int(11)
+);
+insert into employ('1','李华','女','1','','')
+
+
+create table dept(
+       deptid int(11), 
+       deptname varchar(50)
+);
+insert into dept values(1,"测试部"),(2,"前端部"),(3,"后端部");
+insert into station values(11,"测试工程师"),(22,"前端工程师"),(33,"后端工程师");
+(1,1,3000,3500),(2,2,3300,3100),(3,3,2200,3100),
+
+insert into salary values(4,4,2052,2700),(5,5,1700,3550),(6,6,2130,1920),(7,7,1850,2460),(8,8,1350,2450),(9,9,1720,1550),(10,10,2560,3020);
+insert into  values
+
+insert into employ values(1,'李华','女',11,2,22),(2,'张明','男',18,1,11),(3,'还放','女',19,3,33),(4,'大发','女',16,1,11),(5,'拉卡','男',15,1,11),(6,'李四','男',19,1,11),(7,'王五','女',21,2,22),(8,'赵钱','男',17,3,33),(9,'孙李','女',15,2,22),(10,'里里','女',17,3,33);
+
+
+
+
+
+       stationid int(11),
+       stationname varchar(50)
+);
+
+
+1、新员工王小明，性别是男，年龄30，岗位是测试部的测试工程师，薪水6000(基本工资2800，奖金3200);
+insert into employ values(11,'王小明','男','30',1,11 );
+insert into salary values(11,11,2800,3200);
+
+
+
+2、王小明试用期过了，表现非常好，公司决定给他基本工资调薪10%，奖金调15%;
+update salary s set basesalary=3080,bonussalary=3680 where s.employid=(select employid from employ where  ename='王小明');
+(薪资为心算结果          )
+
+
+
+3、查询测试部门最高薪水，最低薪水，平均薪水，显示最高薪水，最低薪水，平均薪水;
+select max(basesalary+bonussalary),min(basesalary+bonussalary),avg(basesalary+bonussalary) from salary where employid in(select employid from employ where deptid=(select deptid from dept  where deptname='测试部'));
+
+
+
+
+4、查询所有部门的最高薪水，最低水，平均薪水，显示部门，最高薪水，最低薪水，平均薪水,并按部门名升序排序;
+select deptname,max(basesalary+bonussalary),min(basesalary+bonussalary),avg(basesalary+bonussalary)
+from salary s,dept d,employ e where e.employid=s.employid and e.deptid = d.deptid group by deptname order by deptname asc ;
+
+
+
+
+5、统计测试部门有多少员工，显示员工数;
+select count(employid)  from employ  where deptid= (select deptid from dept where  deptname='测试部');
+
+
+
+6、统计所有部门员工数，并按部门进行升序排序，显示部门，员工数;
+select deptname,count(employid) from dept d,employ e where d.deptid =e.deptid group by deptname order by deptname asc;
+
+
+
+7、查询所有姓王的所有员工信息;
+select e.employid,e.ename,e.sex,age,e.deptid ,e.stationid,salaryid,deptname,stationname,basesalary,bonussalary  from employ e,station ,dept ,salary where e.deptid = dept.deptid and e.stationid = station.stationid and salary.employid = e.employid and e.ename like '王%';
+测试 UPDATE employ set ename ='王个' where ename='里里';
+
+
+
+8、按部门，性别统计平均薪水;
+select dept.deptname,avg(basesalary+bonussalary) from salary,employ,dept where employ.deptid = dept.deptid and salary.employid = employ.employid group by dept.deptname;
+
+
+test:  4952   测试部门 5113 正确     2 4  5 6 7       1 7 9 前端部门  4693.333   4693.333 ok
+
+
+
+
+
+select employ.sex,avg(basesalary+bonussalary) from salary,employ,dept where employ.deptid = dept.deptid and salary.employid = employ.employid group by employ.sex;
+
+
+9、查询30到40岁 平均薪水;
+select avg(basesalary+bonussalary) from employ e,salary  where salary.employid = e.employid and e.age>=30 and e.age<=40;    5006.6667  正确 
+
+
+   
+
+UPDATE employ set age =31 where age=15;
+te
+ and
+10、查询测试部薪水最高的员工，显示员工姓名；
+select e.ename from employ e,salary,dept  where  e.deptid = dept.deptid and salary.employid = e.employid and (basesalary+bonussalary)=(select 
+max(basesalary+bonussalary)  from salary s1 ,dept d1,employ e1 where e1.deptid = d1.deptid and s1.employid = e1.employid and d1.deptname like'测%');  
+正确
+
+11、删除王小明的所有信息
+delete from salary  where employid =(select e.employid from employ e where e.ename='王小明' ) ;
+delete from employ where ename='王小明';
+部门  
+测试部  1  
+
+岗位 
+
+测试工程师 1 
+
+
+
+
+
+
+
+
